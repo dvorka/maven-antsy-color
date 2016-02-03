@@ -1,6 +1,9 @@
-# thanks to:  http://blog.blindgaenger.net/colorize_maven_output.html
-# and: http://johannes.jakeapp.com/blog/category/fun-with-linux/200901/maven-colorized
-# Colorize Maven Output
+#!/bin/bash
+# Thanks to:
+#   https://github.com/builddoctor/maven-antsy-color
+#   http://blog.blindgaenger.net/colorize_maven_output.html
+#   http://johannes.jakeapp.com/blog/category/fun-with-linux/200901/maven-colorized
+
 alias maven="command mvn"
 function color_maven() {
     local BLUE="[0;34m"
@@ -14,14 +17,16 @@ function color_maven() {
     local WHITE="[1;37m"
     local NO_COLOUR="[0m"
     maven "$@" | sed \
-        -e "s/Tests run: \([^,]*\), Failures: \([^,]*\), Errors: \([^,]*\), Skipped: \([^,]*\)/${LIGHT_GREEN}Tests run: \1$NO_COLOUR, Failures: $RED\2$NO_COLOUR, Errors: $YELLOW\3$NO_COLOUR, Skipped: $LIGHT_BLUE\4$NO_COLOUR/g" \
-        -e "s/\(\[\{0,1\}WARN\(ING\)\{0,1\}\]\{0,1\}.*\)/$YELLOW\1$NO_COLOUR/g" \
-        -e "s/\(\[ERROR\].*\)/$RED\1$NO_COLOUR/g" \
-        -e "s/\(\(BUILD \)\{0,1\}FAILURE.*\)/$RED\1$NO_COLOUR/g" \
-        -e "s/\(\(BUILD \)\{0,1\}SUCCESS.*\)/$LIGHT_GREEN\1$NO_COLOUR/g" \
-        -e "s/\(\[INFO\] [^-].*\)/$LIGHT_GRAY\1$NO_COLOUR/g" \
-        -e "s/\(\[INFO\] -.*\)/$LIGHT_GREEN\1$NO_COLOUR/g"
+-e "s/\(.*-\{55\}\+$\|.*\[INFO\] Scanning for projects.*\|.*\[INFO\] Building.*\|^Running .*\|^ T E S T S$\|^Results.*\)/${WHITE}\1${NO_COLOUR}/g" \
+-e "s/\(.*\[INFO\] BUILD SUCCESS$\|^Tests run:.*Failures: 0.*Errors: 0.*Skipped: 0.*\)/${LIGHT_GREEN}\1${NO_COLOUR}/g" \
+-e "s/\(.*\[WARNING].*\|^NOTE: Maven is executing in offline mode\.\|^Tests run:.*Failures: 0, Errors: 0, Skipped: [^0].*\)/${YELLOW}\1${NO_COLOUR}/g" \
+-e "s/\(.*\[INFO\] BUILD FAILURE\|.* <<< FAILURE!$\|.* <<< ERROR!$\|^Tests in error:.*\|^Tests run:.*Failures: [^0].*\|^Tests run:.*Errors: [^0].*\|.*\[ERROR\].*\)/${LIGHT_RED}\1${NO_COLOUR}/g" \
+-e "/^\[INFO\] .\{52\} /s/\( SUCCESS \)/${LIGHT_GREEN}\1${NO_COLOUR}/g" \
+-e "/^\[INFO\] .\{52\} /s/\( FAILURE \)/${LIGHT_RED}\1${NO_COLOUR}/g" \
+-e "/^\[INFO\] .\{52\} /s/\( SKIPPED\)/${YELLOW}\1${NO_COLOUR}/g"
+
     return $PIPESTATUS
 }
-
 alias mvn=color_maven
+
+# eof
