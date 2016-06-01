@@ -25,7 +25,7 @@ cp mvn ${HOME}/scripts echo "[[ -s \"${HOME}/scripts/mvn\" ]] && source \"${HOME
 * alternatively, in recent Ubuntu Linux and OSX the default _~/.bashrc_ looks for alias additions in a separate file, that you can simply append to:
 
 ```bash
-curl -L https://raw.github.com/builddoctor/maven-antsy-color/master/mvn >> ~/.bash_aliases
+curl -L https://raw.githubusercontent.com/dvorka/maven-antsy-color/master/mvn >> ~/.bash_aliases
 ```
 
 How do you spell 'colour'?
